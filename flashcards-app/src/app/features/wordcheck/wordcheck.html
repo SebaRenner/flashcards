@@ -1,8 +1,16 @@
-<div #card class="flashcard">
+<div 
+    #card 
+    class="flashcard"
+    [class.flashcard--correct]="answerState() === AnswerState.Correct"
+    [class.flashcard--incorrect]="answerState() === AnswerState.Incorrect"
+    [class.flashcard--default]="answerState() === AnswerState.Default">
     {{ this.displayText() }}
 </div>
 @if (!finished()) {
-    <div>
-        <input type="text" #inputField (keyup.enter)="validateWord(inputField.value)">
-    </div>
+    <input 
+        #inputField 
+        type="text"
+        [(ngModel)]="inputValue"
+        [class.input-field--incorrect]="answerState() === AnswerState.Incorrect"
+        (keyup.enter)="validateWord()">
 }
