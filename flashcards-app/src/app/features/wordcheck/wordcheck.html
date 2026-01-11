@@ -1,1 +1,6 @@
-<p>wordcheck works!</p>
+<div #card class="flashcard">
+    {{ flashcards[0].baseLanguage }}
+</div>
+<div>
+    <input type="text" #inputField (keyup.enter)="validateWord(inputField.value)">
+</div>
