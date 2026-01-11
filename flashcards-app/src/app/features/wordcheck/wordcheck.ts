@@ -21,11 +21,11 @@ export class Wordcheck {
 
     inputValue = model('');
     remainingCards = signal(testCards);
-    currentCard = computed(() => this.remainingCards()[0]);
-    finished = computed(() => this.remainingCards().length === 0);
     showAnswer = signal(false);
     answerState = signal<AnswerState>(AnswerState.Default);
     
+    currentCard = computed(() => this.remainingCards()[0]);
+    finished = computed(() => this.remainingCards().length === 0);
     displayText = computed(() => {
       const current = this.currentCard();
       if (!current) return 'All done! 🎉';
