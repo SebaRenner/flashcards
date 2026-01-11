@@ -1,6 +1,8 @@
 <div #card class="flashcard">
-    {{ flashcards[0].baseLanguage }}
+    {{ this.displayText() }}
 </div>
-<div>
-    <input type="text" #inputField (keyup.enter)="validateWord(inputField.value)">
-</div>
+@if (!finished()) {
+    <div>
+        <input type="text" #inputField (keyup.enter)="validateWord(inputField.value)">
+    </div>
+}

@@ -1,5 +1,5 @@
-import { Component, ElementRef, signal, viewChild } from '@angular/core';
-import { Flashcard, WordType } from '../../models/flashcard.model';
+import { Component, computed, ElementRef, signal, viewChild } from '@angular/core';
+import { Flashcard, testCards, WordType } from '../../models/flashcard.model';
 
 @Component({
   selector: 'app-wordcheck',
@@ -9,15 +9,27 @@ import { Flashcard, WordType } from '../../models/flashcard.model';
 })
 export class Wordcheck {
     readonly TIMEOUT_UNTIL_NEXT_CARD = 2000;
+
     readonly flashcardRef = viewChild<ElementRef>('card');
     readonly inputFieldRef = viewChild<ElementRef>('inputField');
 
-    flashcards: Flashcard[] = [{
-      baseLanguage: 'Hund', 
-      resultLanguage: 'Dog',
-      category: 'Animals',
-      wordType: WordType.Noun
-    }]
+    readonly flashcards: Flashcard[] = testCards;
+
+    remainingCards = signal(this.flashcards);
+    showAnswer = signal(false);
+    finished = computed(() => {
+      const cards = this.remainingCards();
+      return cards.length === 0;
+    });
+
+    displayText = computed(() => {
+      const cards = this.remainingCards();
+      if (cards.length === 0) return 'All done! 🎉';
+      
+      return this.showAnswer() 
+        ? cards[0].resultLanguage 
+        : cards[0].baseLanguage;
+    });
 
     validateWord(value: string) {
       const text = value.toLowerCase();
@@ -26,16 +38,36 @@ export class Wordcheck {
 
       if (!cardElem || !inputElem) return;
 
-      if (text == this.flashcards[0].resultLanguage.toLowerCase()) {
+      let correctAnswer = false;
+      const currentCard = this.remainingCards()[0];
+
+      this.showAnswer.set(true);
+
+      if (text == currentCard.resultLanguage.toLowerCase()) {
         cardElem.nativeElement.style.backgroundColor = '#4CAF50'
-        cardElem.nativeElement.textContent = value
+        correctAnswer = true;
       } 
       else {
         inputElem.nativeElement.style.backgroundColor = '#d10b25'
-        cardElem.nativeElement.textContent = this.flashcards[0].resultLanguage
       }
 
-      setTimeout(() => this.resetField(), this.TIMEOUT_UNTIL_NEXT_CARD);
+      setTimeout(() => this.nextField(correctAnswer), this.TIMEOUT_UNTIL_NEXT_CARD);
+    }
+
+    nextField(correctAnswer: boolean) {
+      const cardElem = this.flashcardRef();
+      if (!cardElem) return;
+
+      const currentCards = this.remainingCards();
+
+      if (correctAnswer) {
+        this.remainingCards.set(currentCards.slice(1));
+      } else {
+        this.remainingCards.set([...currentCards.slice(1), currentCards[0]]);
+      }
+
+      this.showAnswer.set(false);
+      this.resetField()
     }
 
     resetField() {
@@ -44,7 +76,6 @@ export class Wordcheck {
 
       if (!cardElem || !inputElem) return;
 
-      cardElem.nativeElement.textContent = this.flashcards[0].baseLanguage;
       cardElem.nativeElement.style.backgroundColor = '#f2b704';
       inputElem.nativeElement.style.backgroundColor = '#FFF'
       inputElem.nativeElement.value = '';
