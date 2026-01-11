@@ -1,5 +1,5 @@
 import { Component, computed, ElementRef, signal, viewChild } from '@angular/core';
-import { Flashcard, testCards, WordType } from '../../models/flashcard.model';
+import { testCards } from '../../models/flashcard.model';
 
 @Component({
   selector: 'app-wordcheck',
@@ -13,22 +13,17 @@ export class Wordcheck {
     readonly flashcardRef = viewChild<ElementRef>('card');
     readonly inputFieldRef = viewChild<ElementRef>('inputField');
 
-    readonly flashcards: Flashcard[] = testCards;
-
-    remainingCards = signal(this.flashcards);
+    remainingCards = signal(testCards);
+    currentCard = computed(() => this.remainingCards()[0]);
+    finished = computed(() => this.remainingCards().length === 0);
     showAnswer = signal(false);
-    finished = computed(() => {
-      const cards = this.remainingCards();
-      return cards.length === 0;
-    });
-
     displayText = computed(() => {
-      const cards = this.remainingCards();
-      if (cards.length === 0) return 'All done! 🎉';
+      const current = this.currentCard();
+      if (!current) return 'All done! 🎉';
       
       return this.showAnswer() 
-        ? cards[0].resultLanguage 
-        : cards[0].baseLanguage;
+        ? current.resultLanguage 
+        : current.baseLanguage;
     });
 
     validateWord(value: string) {
@@ -39,7 +34,7 @@ export class Wordcheck {
       if (!cardElem || !inputElem) return;
 
       let correctAnswer = false;
-      const currentCard = this.remainingCards()[0];
+      const currentCard = this.currentCard();
 
       this.showAnswer.set(true);
 
