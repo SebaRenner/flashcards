@@ -10,4 +10,3 @@ export enum WordType {
     Verb,
     Adjective
 }
-
