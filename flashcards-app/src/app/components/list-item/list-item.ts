@@ -1,5 +1,5 @@
-import { Component, input, OnInit, output } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, input, OnInit, output } from '@angular/core';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Flashcard, WordType } from '../../models/flashcard.model';
 
 @Component({
@@ -13,12 +13,14 @@ export class ListItem implements OnInit {
     remove = output<void>();
     add = output<Flashcard>();
 
+    private fb = inject(NonNullableFormBuilder)
+
     readonly wordTypeOptions = Object.values(WordType);
-    readonly form = new FormGroup({
-        baseLanguage: new FormControl('', { nonNullable: true, validators: Validators.required }),
-        resultLanguage: new FormControl('', { nonNullable: true, validators: Validators.required }),
-        wordType: new FormControl(WordType.Verb, { nonNullable: true, validators: Validators.required }),
-        category: new FormControl('', { nonNullable: true, validators: Validators.required })
+    readonly form = this.fb.group({
+        baseLanguage: ['', Validators.required],
+        resultLanguage: ['', Validators.required],
+        wordType: [WordType.Verb, Validators.required],
+        category: ['', Validators.required],
     });
 
     get isReadOnly(): boolean {
@@ -38,7 +40,7 @@ export class ListItem implements OnInit {
     }
 
     addItem() {
-      const flashcard: Flashcard = this.form.getRawValue() as Flashcard;
+      const flashcard: Flashcard = this.form.getRawValue();
       this.add.emit(flashcard);
       this.form.reset();
     }
