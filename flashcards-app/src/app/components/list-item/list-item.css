@@ -3,8 +3,15 @@ form {
     gap: 20px;
 }
 
+input,
+select,
+button {
+    font-size: 16px;
+}
+
 .list-item {
     display: grid;
+    grid-template-columns: 1fr auto;
 }
 
 .actions {

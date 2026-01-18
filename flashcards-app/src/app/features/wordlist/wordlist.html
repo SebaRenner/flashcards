@@ -1,7 +1,7 @@
 <div class="actions">
     <button (click)="startTest()">Start Test</button>
 </div>
-<div>
+<div class="list">
     @for (card of cards; track $index) {
         <app-list-item [data]="card" (remove)="remove($index)" (add)="add($event)"></app-list-item>
     }
