@@ -3,6 +3,6 @@
 </div>
 <div>
     @for (card of cards; track $index) {
-        <app-list-item [data]="card"></app-list-item>
+        <app-list-item [data]="card" (remove)="remove($index)" (add)="add($event)"></app-list-item>
     }
 </div>

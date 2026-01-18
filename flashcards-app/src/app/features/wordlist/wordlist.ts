@@ -14,6 +14,14 @@ export class Wordlist {
 
   cards: Flashcard[] = testCards;
 
+  remove(index: number) {
+    this.cards.splice(index, 1);
+  }
+
+  add(flashcard: Flashcard) {
+    this.cards.push(flashcard);
+  }
+
   startTest() {
     this.router.navigate(['test']);
   }
