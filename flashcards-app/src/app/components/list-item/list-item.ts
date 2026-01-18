@@ -15,16 +15,21 @@ export class ListItem implements OnInit {
 
     readonly wordTypeOptions = Object.values(WordType);
     readonly form = new FormGroup({
-        baseLanguage: new FormControl('', Validators.required),
-        resultLanguage: new FormControl('', Validators.required),
-        wordType: new FormControl(WordType.Verb, Validators.required),
-        category: new FormControl('', Validators.required)
+        baseLanguage: new FormControl('', { nonNullable: true, validators: Validators.required }),
+        resultLanguage: new FormControl('', { nonNullable: true, validators: Validators.required }),
+        wordType: new FormControl(WordType.Verb, { nonNullable: true, validators: Validators.required }),
+        category: new FormControl('', { nonNullable: true, validators: Validators.required })
     });
+
+    get isReadOnly(): boolean {
+        return !!this.data();
+    }
 
     ngOnInit() {
         const cardData = this.data();
         if (cardData) {
             this.form.patchValue(cardData);
+            this.form.disable();
         }
     }
 
@@ -35,5 +40,6 @@ export class ListItem implements OnInit {
     addItem() {
       const flashcard: Flashcard = this.form.getRawValue() as Flashcard;
       this.add.emit(flashcard);
+      this.form.reset();
     }
 }

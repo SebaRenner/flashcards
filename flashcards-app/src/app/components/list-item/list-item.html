@@ -12,7 +12,11 @@
         <input type="text" formControlName="category">
     </form>
     <div class="actions">
-        <button (click)="removeItem()">-</button>
-        <button [disabled]="form.invalid" (click)="addItem()">+</button>
+        @if (isReadOnly) {
+            <button (click)="removeItem()">-</button>
+        } 
+        @else {
+            <button [disabled]="form.invalid" (click)="addItem()">+</button>
+        }
     </div>
 </div>

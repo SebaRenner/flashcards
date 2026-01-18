@@ -4,9 +4,12 @@ form {
 }
 
 input,
-select,
-button {
+select {
     font-size: 16px;
+}
+
+button {
+    width: 24px;
 }
 
 .list-item {
