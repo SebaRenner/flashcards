@@ -1,0 +1,8 @@
+<div class="actions">
+    <button (click)="startTest()">Start Test</button>
+</div>
+<div>
+    @for (card of cards; track $index) {
+        <app-list-item [data]="card"></app-list-item>
+    }
+</div>

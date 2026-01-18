@@ -6,9 +6,9 @@ export interface Flashcard {
 }
 
 export enum WordType {
-    Noun,
-    Verb,
-    Adjective
+    Noun = 'Noun',
+    Verb = 'Verb',
+    Adjective = 'Adjective'
 }
 
 export const testCards: Flashcard[] = [

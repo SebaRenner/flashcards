@@ -1,0 +1,18 @@
+<div class="list-item">
+    <form [formGroup]="form">
+        <input type="text" formControlName="baseLanguage">
+        <input type="text" formControlName="resultLanguage">
+        <select formControlName="wordType">
+            @for (type of wordTypeOptions; track $index) {
+                <option [value]="type">
+                    {{ type }}
+                </option>
+            }
+        </select>
+        <input type="text" formControlName="category">
+    </form>
+    <div class="actions">
+        <button (click)="removeItem()">-</button>
+        <button [disabled]="form.invalid" (click)="addItem()">+</button>
+    </div>
+</div>

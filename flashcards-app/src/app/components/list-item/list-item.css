@@ -1,0 +1,13 @@
+form {
+    display: flex;
+    gap: 20px;
+}
+
+.list-item {
+    display: grid;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
